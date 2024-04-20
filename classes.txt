@@ -1,0 +1,17 @@
+- Class Player
+    * name
+    * position
+
+- Abstract Class Teleporter
+    * head position
+    * tail position
+
+    + Bool teleport (Player p)
+        - trigger when player stop on this
+        - return true if player is teleported false if player is not teleported
+    + getter head
+    + getter tail
+
+
+- Class Ladder implement Teleporter
+- Class Snake implement Teleporter

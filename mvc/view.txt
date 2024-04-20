@@ -1,0 +1,17 @@
+before game started
+- who is P1, P2, P3, P4
+
+after game started
+- THE MAP
+- snake
+    head & tail
+- ladder
+    start & end point
+- finish point
+- each player position
+- point of dice
+- whose turn
+
+after game end
+- leaderboard
+- text that ask if they want to play again

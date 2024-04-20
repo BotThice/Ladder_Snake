@@ -1,2 +1,3 @@
 - press enter button to roll a dice
 - input their name
+- select if they want to play again after the game end

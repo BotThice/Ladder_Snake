@@ -1,0 +1,12 @@
+- total player
+- remain player
+- player finished order
+- player's position
+- player's name
+
+- order of player's turn (who roll dice first, who last)
+- which player turn
+- point of dice that player roll
+
+- ladder&snake head&tail position
+- goal position

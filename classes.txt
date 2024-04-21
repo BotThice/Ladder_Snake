@@ -2,7 +2,7 @@
     Map<String,name>
     * int position
 
-    + Bool move(int)
+    + move(int)
     + position getter
 
 - Abstract Class Teleporter

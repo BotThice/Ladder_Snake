@@ -6,7 +6,7 @@ public class Game {
     private static ArrayList<Ladder> ladder;
     private static ArrayList<Snake> snake;
     private  static ArrayList<Integer> headPos;
-    private  static Queue<Player> leaderboard;
+    private  static Leaderboard leaderboard;
     private static  Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) {
 
@@ -20,7 +20,7 @@ public class Game {
         snake = new ArrayList<>();
         ladder = new ArrayList<>();
         headPos  = new ArrayList<>();
-        leaderboard = new PriorityQueue<>();
+        leaderboard = new Leaderboard();
 
         do{
             Game game = new Game();
@@ -35,10 +35,12 @@ public class Game {
 
     public void end(){
         System.out.println("------------------- Game has ended -------------------");
-
+        leaderboard.showBoard();
+        System.out.print("Play again ? (Y/N)");
     }
     public  void startGame(){
         while(order.size() != 1){
+
             for(Player p:order){
                 String text = "P"+p.getOrder();
                 System.out.print(text+"'s turn: press Enter to roll a dice");
@@ -51,21 +53,30 @@ public class Game {
                     Boolean isTeleported=false;
                     for(Ladder l:ladder){
                         isTeleported = l.teleport(p);
-                        if(isTeleported){break;}
+                        if(isTeleported){
+                            System.out.println("Ladder !!");
+                            break;
+                        }
                     }
                     if(!isTeleported){
                         for(Snake s:snake){
                             isTeleported = s.teleport(p);
-                            if(isTeleported) break;
+                            if(isTeleported){
+                                System.out.println("Snake eats "+text);
+                                break;
+                            }
                         }
                     }
                 }
+                System.out.println(text+"'s position: "+p.getPosition());
 
                 if(p.getPosition().equals(mapGoal)){
                     System.out.println(text+" finished!!");
                     order.remove(p);
                     leaderboard.add(p);
                 }
+
+                // render map here
             }
         }
         leaderboard.add(order.remove(0));

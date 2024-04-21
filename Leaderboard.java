@@ -10,13 +10,13 @@ public class Leaderboard {
 
     protected void showBoard(){
         int place =1;
-        System.out.println("============ Leaderboard ============");
+        System.out.println("============= Leaderboard =============");
         while(!list.isEmpty()){
             Player p =list.poll();
             System.out.println(place+"."+p.getName());
             place++;
         }
-        System.out.println("=====================================");
+        System.out.println("======================================");
     }
 
     protected Boolean add(Player p){

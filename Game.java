@@ -36,12 +36,12 @@ public class Game {
     public void end(){
         System.out.println("------------------- Game has ended -------------------");
         leaderboard.showBoard();
-        System.out.print("Play again ? (Y/N)");
+        System.out.print("Play again ? (Y/N) : ");
     }
     public  void startGame(){
         while(order.size() != 1){
-
-            for(Player p:order){
+            Player p = order.removeFirst();
+//            for(Player p:order){
                 String text = "P"+p.getOrder();
                 System.out.print(text+"'s turn: press Enter to roll a dice");
                 scanner.nextLine();
@@ -74,10 +74,13 @@ public class Game {
                     System.out.println(text+" finished!!");
                     order.remove(p);
                     leaderboard.add(p);
+                }else{
+                    order.addLast(p);
                 }
 
                 // render map here
-            }
+//            }
+
         }
         leaderboard.add(order.remove(0));
 

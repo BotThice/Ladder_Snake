@@ -58,4 +58,9 @@ class GameTest {
         }
     }
 
+    @Test
+    void start(){
+
+    }
+
 }

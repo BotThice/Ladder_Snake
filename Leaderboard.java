@@ -14,6 +14,7 @@ public class Leaderboard {
         while(!list.isEmpty()){
             Player p =list.poll();
             System.out.println(place+"."+p.getName());
+            place++;
         }
         System.out.println("=====================================");
     }
@@ -21,4 +22,5 @@ public class Leaderboard {
     protected Boolean add(Player p){
         return list.add(p);
     }
+
 }

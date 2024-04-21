@@ -1,10 +1,10 @@
 - Class Player
-    * name
-    * position
+    Map<String,name>
+    * int position
 
 - Abstract Class Teleporter
-    * head position
-    * tail position
+    * int head position
+    * int tail position
 
     + Bool teleport (Player p)
         - trigger when player stop on this
@@ -15,3 +15,23 @@
 
 - Class Ladder implement Teleporter
 - Class Snake implement Teleporter
+
+- Class Leaderboard
+    Queue<Map<String,name>>
+    + showLeader()
+
+- Class Game
+    * int PlayerAmount
+    * List remainPlayer
+    * int ladderAmount
+    * int snakeAmount
+    * Leaderboard board
+    *
+
+    + int rollDice() return positive int in range 1-6
+
+    state
+    + playerSetup
+    + gameSetup
+    + start game
+    + game end

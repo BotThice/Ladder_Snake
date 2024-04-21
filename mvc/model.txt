@@ -8,5 +8,6 @@
 - which player turn
 - point of dice that player roll
 
+- ladder&snake amount
 - ladder&snake head&tail position
 - goal position

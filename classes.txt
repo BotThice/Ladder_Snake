@@ -1,5 +1,6 @@
 - Class Player
-    Map<String,name>
+    * int order
+    * String name
     * int position
 
     + move(int)
@@ -20,8 +21,10 @@
 - Class Snake implement Teleporter
 
 - Class Leaderboard
-    Queue<Map<String,name>>
+    LinkedList<Player>
     + showLeader()
+    + add()
+    + poll()
 
 - Class Game
     * int PlayerAmount

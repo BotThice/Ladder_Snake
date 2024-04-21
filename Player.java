@@ -1,12 +1,13 @@
 import java.util.HashMap;
 
 public class Player {
-    HashMap<Integer,String> p;
+    Integer order;
+    String name;
     Integer position =1;
 
     Player(Integer order, String name){
-        p = new HashMap<>();
-        p.put(order,name);
+       this.order = order;
+       this.name = name;
     }
 
     protected void move(Integer step,Integer goal){
@@ -18,6 +19,14 @@ public class Player {
 
     protected Integer getPosition(){
         return position;
+    }
+
+    protected Integer getOrder(){
+        return order;
+    }
+
+    protected String getName(){
+        return name;
     }
 
     protected void setPosition(Integer pos){

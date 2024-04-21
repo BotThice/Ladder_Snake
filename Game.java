@@ -2,10 +2,11 @@ import java.util.*;
 
 public class Game {
     private static int playerAmount,ladderAmount,snakeAmount,mapRow,mapCol,mapGoal;
-    private static Queue<Player> order;
+    private static List<Player> order;
     private static ArrayList<Ladder> ladder;
     private static ArrayList<Snake> snake;
     private  static ArrayList<Integer> headPos;
+    private  static Queue<Player> leaderboard;
     private static  Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) {
 
@@ -15,19 +16,59 @@ public class Game {
         mapCol = 10;
         mapRow = 10;
         mapGoal = mapCol*mapRow;
-        order = new PriorityQueue<>();
+        order = new LinkedList<>();
         snake = new ArrayList<>();
         ladder = new ArrayList<>();
         headPos  = new ArrayList<>();
+        leaderboard = new PriorityQueue<>();
 
         do{
             Game game = new Game();
             game.setupPlayer();
             game.setupLadder();
             game.setupSnake();
-//            game.start();
-
+            game.startGame();
+            game.end();
         }while(scanner.nextLine().equalsIgnoreCase("y"));
+
+    }
+
+    public void end(){
+        System.out.println("------------------- Game has ended -------------------");
+
+    }
+    public  void startGame(){
+        while(order.size() != 1){
+            for(Player p:order){
+                String text = "P"+p.getOrder();
+                System.out.print(text+"'s turn: press Enter to roll a dice");
+                scanner.nextLine();
+                Integer step = rollDice();
+                System.out.println(text+" got "+step+".");
+                p.move(step,mapGoal);
+
+                if(headPos.contains(p.getPosition())){
+                    Boolean isTeleported=false;
+                    for(Ladder l:ladder){
+                        isTeleported = l.teleport(p);
+                        if(isTeleported){break;}
+                    }
+                    if(!isTeleported){
+                        for(Snake s:snake){
+                            isTeleported = s.teleport(p);
+                            if(isTeleported) break;
+                        }
+                    }
+                }
+
+                if(p.getPosition().equals(mapGoal)){
+                    System.out.println(text+" finished!!");
+                    order.remove(p);
+                    leaderboard.add(p);
+                }
+            }
+        }
+        leaderboard.add(order.remove(0));
 
     }
 

@@ -1,7 +1,6 @@
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,7 +15,7 @@ class GameTest {
     }
 
     @Test
-    void ladder(){
+    void ladderSetup(){
         int mapGoal=100;
         int minHeadPos =2, maxHead = mapGoal-1, maxTail = mapGoal, minTail;
         int ladderAmount =1000;
@@ -34,6 +33,28 @@ class GameTest {
             assertTrue(l.getHead() >= minHeadPos && l.getHead() <= maxHead);
 
             assertTrue(l.getTail() >= l.getHead()+1 && l.getTail()<=mapGoal);
+        }
+    }
+
+    @Test
+    void snakeSetup(){
+        int mapGoal=100;
+        int minHeadPos =2, maxHead = mapGoal-1, maxTail, minTail=1;
+        int snakeAmount =1000;
+        ArrayList<Snake> snake = new ArrayList<>();
+
+        for(int i=0;i<snakeAmount;i++){
+            int head = (int)(Math.random() * (maxHead - minHeadPos + 1)) + minHeadPos; // random 2 to 99
+            maxTail = head-1;
+            int tail = (int)(Math.random() * (maxTail - minTail +1)) + minTail; // random 1 to head-1
+            snake.add(new Snake(head,tail));
+        }
+
+        for(Snake l:snake){
+
+            assertTrue(l.getHead() >= minHeadPos && l.getHead() <= maxHead);
+
+            assertTrue(l.getTail() <= l.getHead()-1 && l.getTail()>=minTail);
         }
     }
 

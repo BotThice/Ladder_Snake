@@ -1,15 +1,20 @@
 import java.util.*;
 
 public class Game {
-    private static int playerAmount,ladderAmount,snakeAmount,mapRow,mapCol,mapGoal;
-    private static List<Player> order;
-    private static ArrayList<Ladder> ladder;
-    private static ArrayList<Snake> snake;
-    private  static ArrayList<Integer> headPos;
-    private  static Leaderboard leaderboard;
-    private static  Scanner scanner = new Scanner(System.in);
-    public static void main(String[] args) {
+    private int playerAmount,ladderAmount,snakeAmount,mapRow,mapCol,mapGoal;
+    private List<Player> order;
+    private ArrayList<Ladder> ladder;
+    private ArrayList<Snake> snake;
+    private ArrayList<Integer> headPos;
+    private Leaderboard leaderboard;
+    private final Scanner scanner = new Scanner(System.in);
 
+    public static void main(String[] args) {
+        Game g = new Game();
+        g.varSetup();
+        g.play();
+    }
+    public void varSetup(){
         playerAmount = 4;
         ladderAmount = 6;
         snakeAmount = 6;
@@ -21,14 +26,15 @@ public class Game {
         ladder = new ArrayList<>();
         headPos  = new ArrayList<>();
         leaderboard = new Leaderboard();
+    }
+    public void play() {
 
         do{
-            Game game = new Game();
-            game.setupPlayer();
-            game.setupLadder();
-            game.setupSnake();
-            game.startGame();
-            game.end();
+            setupPlayer();
+            setupLadder();
+            setupSnake();
+            startGame();
+            end();
         }while(scanner.nextLine().equalsIgnoreCase("y"));
 
     }
@@ -41,34 +47,13 @@ public class Game {
     public  void startGame(){
         while(order.size() != 1){
             Player p = order.removeFirst();
-//            for(Player p:order){
                 String text = "P"+p.getOrder();
                 System.out.print(text+"'s turn: press Enter to roll a dice");
                 scanner.nextLine();
+
                 Integer step = rollDice();
                 System.out.println(text+" got "+step+".");
-                p.move(step,mapGoal);
-
-                if(headPos.contains(p.getPosition())){
-                    Boolean isTeleported=false;
-                    for(Ladder l:ladder){
-                        isTeleported = l.teleport(p);
-                        if(isTeleported){
-                            System.out.println("Ladder !!");
-                            break;
-                        }
-                    }
-                    if(!isTeleported){
-                        for(Snake s:snake){
-                            isTeleported = s.teleport(p);
-                            if(isTeleported){
-                                System.out.println("Snake eats "+text);
-                                break;
-                            }
-                        }
-                    }
-                }
-                System.out.println(text+"'s position: "+p.getPosition());
+                stepCal(p,step,text);
 
                 if(p.getPosition().equals(mapGoal)){
                     System.out.println(text+" finished!!");
@@ -77,13 +62,34 @@ public class Game {
                 }else{
                     order.addLast(p);
                 }
-
                 // render map here
-//            }
-
         }
         leaderboard.add(order.remove(0));
 
+    }
+
+    public void stepCal(Player p,int step, String text){
+        p.move(step,mapGoal);
+        if(headPos.contains(p.getPosition())){
+            Boolean isTeleported=false;
+            for(Ladder l:ladder){
+                isTeleported = l.teleport(p);
+                if(isTeleported){
+                    System.out.println("Ladder !!");
+                    break;
+                }
+            }
+            if(!isTeleported){
+                for(Snake s:snake){
+                    isTeleported = s.teleport(p);
+                    if(isTeleported){
+                        System.out.println("Snake eats "+text);
+                        break;
+                    }
+                }
+            }
+        }
+        System.out.println(text+"'s position: "+p.getPosition());
     }
 
     public void setupPlayer(){
@@ -136,5 +142,9 @@ public class Game {
     protected Integer rollDice(){
         Random dice = new Random();
         return dice.nextInt(6)+1;
+    }
+
+    protected void setHeadPos(ArrayList<Integer> list){
+        headPos = list;
     }
 }

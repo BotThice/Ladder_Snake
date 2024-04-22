@@ -1,8 +1,8 @@
 import java.util.HashMap;
 
 public class Player {
-    Integer order;
-    String name;
+    private final Integer order;
+    private final String name;
     Integer position =1;
 
     Player(Integer order, String name){

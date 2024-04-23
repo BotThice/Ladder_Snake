@@ -1,5 +1,5 @@
 public class Snake extends Teleporter {
-    Snake(int head,int tail){
+    Snake(Integer head,Integer tail){
         this.head = head;
         this.tail = tail;
     }

@@ -1,5 +1,6 @@
  abstract class Teleporter {
-    protected int head,tail;
+    protected Integer head;
+    protected Integer tail;
 
     Boolean teleport(Player p){
         if(isHead(p.getPosition())) {
@@ -10,8 +11,8 @@
         }
     }
 
-    Boolean isHead(int pos){
-        return pos==head;
+    Boolean isHead(Integer position){
+        return position.equals(head);
     }
 
     int getHead(){

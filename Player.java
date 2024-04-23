@@ -1,18 +1,18 @@
 import java.util.HashMap;
 
 public class Player {
-    private final Integer order;
+    private final String codeName;
     private final String name;
-    Integer position =1;
+    private Integer position = 1;
 
-    Player(Integer order, String name){
-       this.order = order;
+    Player(String codeName,String name){
+       this.codeName = codeName;
        this.name = name;
     }
 
     protected void move(Integer step,Integer goal){
-        position+=step;
-        if(position>goal) {
+        position += step;
+        if(position > goal){
             position = goal - position % goal;
         }
     }
@@ -21,8 +21,8 @@ public class Player {
         return position;
     }
 
-    protected Integer getOrder(){
-        return order;
+    protected String getCodeName(){
+        return codeName;
     }
 
     protected String getName(){

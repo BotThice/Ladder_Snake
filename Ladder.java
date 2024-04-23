@@ -1,5 +1,5 @@
 public class Ladder extends Teleporter {
-    Ladder(int head,int tail){
+    Ladder(Integer head,Integer tail){
         this.head = head;
         this.tail = tail;
     }

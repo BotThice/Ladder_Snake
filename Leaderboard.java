@@ -3,24 +3,26 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class Leaderboard {
-    private LinkedList<Player> list;
+    private LinkedList<Player> playersFinishedOrder;
     Leaderboard(){
-        list = new LinkedList<>();
+        playersFinishedOrder = new LinkedList<>();
     }
 
     protected void showBoard(){
-        int place =1;
+        int place = 1;
         System.out.println("============= Leaderboard =============");
-        while(!list.isEmpty()){
-            Player p =list.poll();
-            System.out.println(place+"."+p.getName());
+
+        while(!playersFinishedOrder.isEmpty()){
+            Player p = playersFinishedOrder.poll();
+            System.out.println(place + "." + p.getName());
             place++;
         }
+
         System.out.println("======================================");
     }
 
-    protected Boolean add(Player p){
-        return list.add(p);
+    protected void addFinishedPlayer(Player p){
+        playersFinishedOrder.addLast(p);
     }
 
 }

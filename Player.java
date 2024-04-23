@@ -1,4 +1,3 @@
-import java.util.HashMap;
 
 public class Player {
     private final String codeName;

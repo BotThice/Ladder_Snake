@@ -1,17 +1,19 @@
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+// TODO : add space after , parameters
 public class Game {
+    // TODO : Create Class for a dice
     private Integer diceFaces;
     private List<Player> playersTurnOrder;
-    private List<Ladder> ladders;
-    private List<Snake> snakes;
+    private List<Ladder> ladders; // TODO : move this to Class Board
     private List<Integer> ladderOrSnakeHeadPosition; // TODO : setup ladder, snake without using this
     private Leaderboard leaderboard;
     private Board board;
     private final Scanner playerInput = new Scanner(System.in);
 
     public void startGame() throws InterruptedException {
+        // TODO : switch setupPlayer and Board
         setupPlayer();
         setupBoard();
         setupTeleporter();
@@ -21,6 +23,7 @@ public class Game {
     }
 
     private void setupBoard() {
+        // TODO : ระวังตอน row หรือ column เป็น -
         Integer boardColumn = 10;
         Integer boardRow = 10;
         board = new Board(boardRow, boardColumn);
@@ -36,7 +39,7 @@ public class Game {
         playersTurnOrder = new LinkedList<>();
         Integer playerAmount = 4;
 
-        for(int codeNameRunner = 1; codeNameRunner < playerAmount + 1; codeNameRunner++){
+        for(int codeNameRunner = 1; codeNameRunner < playerAmount + 1; codeNameRunner++) {
             String codeName = "P" + codeNameRunner;
             System.out.print(codeName + " name's: ");
             String name = playerInput.nextLine();
@@ -45,7 +48,6 @@ public class Game {
     }
 
     private void setupSnake() {
-        snakes = new LinkedList<>(); // TODO : ตอบให้ได้ว่าทำไมถึงเปลี่ยนจาก arraylist เป็นแบบนี้
         Integer snakeAmount = 6;
 
         Integer maxTailPosition;
@@ -54,14 +56,16 @@ public class Game {
         Integer headPosition;
         Integer tailPosition;
 
-        while(snakes.size() < snakeAmount){
+        List<Snake> snakesInBoard = board.getSnakes();
+
+        while(snakesInBoard.size() < snakeAmount) {
             headPosition = randomHeadPosition();// TODO : change this logic => create new list that contain unique Integer and pick one to initial head position
             ladderOrSnakeHeadPosition.add(headPosition);
 
             maxTailPosition = headPosition - 1;
             tailPosition = randomInRange(minTailPosition,maxTailPosition);
 
-            snakes.add(new Snake(headPosition,tailPosition));
+            snakesInBoard.add(new Snake(headPosition,tailPosition));
         }
     }
 
@@ -75,20 +79,16 @@ public class Game {
         Integer headPosition;
         Integer tailPosition;
 
-        while(ladders.size() < ladderAmount){
-            headPosition = randomHeadPosition(); // TODO : same as line 58
+        List<Ladder> laddersInBoard = board.getLadders();
+
+        while(laddersInBoard.size() < ladderAmount) {
+            headPosition = randomHeadPosition();
+            ladderOrSnakeHeadPosition.add(headPosition);
 
             minTailPosition = headPosition + 1;
-
-            if(!ladders.isEmpty()){
-                for(Ladder sameHeadPositionChecking:ladders){
-
-                }
-            }
-
             tailPosition = randomInRange(minTailPosition,maxTailPosition);
 
-            ladders.add(new Ladder(headPosition,tailPosition));
+            laddersInBoard.add(new Ladder(headPosition,tailPosition));
         }
     }
 
@@ -105,7 +105,7 @@ public class Game {
     public void play() throws InterruptedException {
         Integer currentPlayerIndex = 0;
 
-        while(playersTurnOrder.size() > 1){
+        while(playersTurnOrder.size() > 1) {
             board.showBoard();
 
             Player currentPlayer = playersTurnOrder.get(currentPlayerIndex);
@@ -113,30 +113,27 @@ public class Game {
 
             System.out.print(playerName + "'s turn: press Enter to roll a dice. ");
           //  playerInput.nextLine();
+            //TODO : face=> step
             Integer face = rollDice();
 
             currentPlayer.move(face);
             System.out.println(playerName + " got " + face + ".");
 
-            Boolean isTeleported = false;
-
-            if(isOnLadderHead(currentPlayer)){
-                isTeleported = true;
+            // TODO : fix this
+            if(isOnLadderHead(currentPlayer)) {
                 laddersTeleport(currentPlayer);
+            }else if(isOnSnakeHead(currentPlayer)) {
+                snakesTeleport(currentPlayer);
             }
 
-            if(isTeleported){
-                if(isOnSnakeHead(currentPlayer)){
-                    snakesTeleport(currentPlayer);
-                }
-            }
-
-            if(isReachedGoal(currentPlayer)){
+            if(isReachedGoal(currentPlayer)) {
                 System.out.println(playerName + " finished!!");
                 playersTurnOrder.remove(currentPlayer);
                 leaderboard.addFinishedPlayer(currentPlayer);
+                // TODO : space before else and after else
             }else{
-                if(currentPlayer.getPosition() > board.getGoalPosition()){
+                if(currentPlayer.getPosition() > board.getGoalPosition()) {
+                    // TODO : change to easier calculation
                     Integer stepBack = (-2) * currentPlayer.getPosition() % board.getGoalPosition();
                     currentPlayer.move(stepBack);
                 }
@@ -170,8 +167,8 @@ public class Game {
     }
 
     private Boolean isOnLadderHead(Player target) {
-        for(Ladder checkingLadder:ladders){
-            if(target.getPosition().equals(checkingLadder.getHead())){
+        for(Ladder checkingLadder:ladders) {
+            if(target.getPosition().equals(checkingLadder.getHead())) {
                 return true;
             }
         }
@@ -180,8 +177,8 @@ public class Game {
     }
 
     private void laddersTeleport(Player target) {
-        for(Ladder finding:ladders){
-            if(target.getPosition().equals(finding.getHead())){
+        for(Ladder finding:ladders) {
+            if(target.getPosition().equals(finding.getHead())) {
                 finding.teleport(target);
                 break;
             }
@@ -189,8 +186,9 @@ public class Game {
     }
 
     private Boolean isOnSnakeHead(Player target) {
-        for(Snake checkingSnake:snakes){
-            if(target.getPosition().equals(checkingSnake.getHead())){
+        List<Snake> snakes = board.getSnakes();
+        for(Snake checkingSnake:snakes) {
+            if(target.getPosition().equals(checkingSnake.getHead())) {
                 return true;
             }
         }
@@ -199,8 +197,11 @@ public class Game {
     }
 
     private void snakesTeleport(Player target) {
-        for(Snake finding:snakes){
-            if(target.getPosition().equals(finding.getHead())){
+        // TODO : change snakes => snakesInBoard
+        List<Snake> snakes = board.getSnakes();
+        // TODO : change finding => ?
+        for(Snake finding:snakes) {
+            if(target.getPosition().equals(finding.getHead())) {
                 finding.teleport(target);
                 break;
             }

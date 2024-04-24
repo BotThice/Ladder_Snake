@@ -17,9 +17,9 @@ public class Board {
         Integer runningNumber = goalPosition;
         showBorder();
         
-        for(int row = maxRow; row > 0; row--){
-            for(int column = 1; column <= maxColumn; column++){
-                if(isEven(row)){
+        for(int row = maxRow; row > 0; row--) {
+            for(int column = 1; column <= maxColumn; column++) {
+                if(isEven(row)) {
                     System.out.printf("| %-8d",runningNumber);
                     runningNumber--;
                 }else{
@@ -49,5 +49,13 @@ public class Board {
 
     protected Integer getGoalPosition() {
         return goalPosition;
+    }
+
+    protected List<Snake> getSnakes(){
+        return snakes;
+    }
+
+    protected List<Ladder> getLadders(){
+        return ladders;
     }
 }

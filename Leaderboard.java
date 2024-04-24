@@ -6,7 +6,7 @@ public class Leaderboard {
         playersFinishedOrder = new LinkedList<>();
     }
 
-    protected void showBoard(){
+    protected void showBoard() {
         int place = 1;
         System.out.println("============= Leaderboard =============");
 
@@ -19,7 +19,7 @@ public class Leaderboard {
         System.out.println("======================================");
     }
 
-    protected void addFinishedPlayer(Player p){
+    protected void addFinishedPlayer(Player p) {
         playersFinishedOrder.addLast(p);
     }
 

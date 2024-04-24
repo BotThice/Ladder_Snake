@@ -3,20 +3,20 @@ import java.util.List;
 public class Board {
     private final Integer maxRow;
     private final Integer maxCol;
-    private final Integer goal;
+    private final Integer goalPosition;
     private List<Ladder> ladders;
     private List<Snake> snakes;
 
-    Board(Integer maxRow,Integer maxCol){
+    Board(Integer maxRow,Integer maxCol) {
         this.maxCol = maxCol;
         this.maxRow = maxRow;
-        goal = maxCol * maxRow;
+        goalPosition = maxCol * maxRow;
     }
 
-    protected void renderMap(){
-        Integer runningNumber = goal;
-        System.out.println(String.format("%" + 10 * maxCol + "s"," ").replace(" ","-"));
-
+    protected void showBoard() {
+        Integer runningNumber = goalPosition;
+        showBorder();
+        
         for(int row = maxRow; row > 0; row--){
             for(int col = 1; col <= maxCol; col++){
                 if(isEvenRow(row)){
@@ -32,15 +32,23 @@ public class Board {
             System.out.println();
         }
 
+        showBorder();
+    }
+    
+    private void showBorder(){
         System.out.println(String.format("%" + 10 * maxCol + "s"," ").replace(" ","-"));
     }
 
-    protected void setupBoard(){
+    protected void setupBoard() {
 
     }
 
-    private boolean isEvenRow(Integer row){
+    private boolean isEvenRow(Integer row) {
         return row % 2 == 0;
+    }
+
+    protected Integer getGoalPosition(){
+        return goalPosition;
     }
 
 }

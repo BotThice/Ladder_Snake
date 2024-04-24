@@ -1,34 +1,25 @@
 
 public class Player {
-    private final String codeName;
     private final String name;
     private Integer position = 1;
 
-    Player(String codeName,String name){
-       this.codeName = codeName;
+    Player(String name) {
        this.name = name;
     }
 
-    protected void move(Integer step,Integer goal){
+    protected void move(Integer step) {
         position += step;
-        if(position > goal){
-            position = goal - position % goal;
-        }
     }
 
-    protected Integer getPosition(){
+    protected Integer getPosition() {
         return position;
     }
 
-    protected String getCodeName(){
-        return codeName;
-    }
-
-    protected String getName(){
+    protected String getName() {
         return name;
     }
 
-    protected void setPosition(Integer pos){
+    protected void setPosition(Integer pos) {
         position = pos;
     }
 }

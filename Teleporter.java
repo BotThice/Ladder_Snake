@@ -2,7 +2,7 @@
     protected Integer head;
     protected Integer tail;
 
-    Boolean teleport(Player p){
+    Boolean teleport(Player p) {
         if(isHead(p.getPosition())) {
             p.setPosition(tail);
             return true;
@@ -11,15 +11,15 @@
         }
     }
 
-    Boolean isHead(Integer position){
+    Boolean isHead(Integer position) {
         return position.equals(head);
     }
 
-    int getHead(){
+    Integer getHead() {
         return head;
     }
 
-    int getTail(){
+    Integer getTail() {
         return tail;
     }
 }

@@ -2,106 +2,119 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class Game {
-    private Integer playerAmount,ladderAmount,snakeAmount,mapRow,mapCol,goal; //TODO : แยกบรรทัดตัวแปร
+    private Integer diceFaces;
     private List<Player> playersTurnOrder;
     private List<Ladder> ladders;
     private List<Snake> snakes;
-    private List<Integer> headPos;
+    private List<Integer> ladderOrSnakeHeadPosition;
     private Leaderboard leaderboard;
-    private Board map; //TODO : Change var name to board
+    private Board board;
     private final Scanner playerInput = new Scanner(System.in);
 
     public void startGame() throws InterruptedException {
-        setupVariable();  // TODO : Variable กว้างไป
+        setupBoard();
         setupPlayer();
-        setupLadder();
-        setupSnake();
+        setupTeleporter();
+        setupLeaderboard();
         play();
         showLeaderboard();
     }
-    public void setupVariable(){// TODO : ควรเว้นหน้า {
-        playerAmount = 4;
-        ladderAmount = 6;
-        snakeAmount = 6;
-        mapCol = 10;
-        mapRow = 10;
-        goal = mapCol * mapRow;
-        playersTurnOrder = new LinkedList<>();
-        snakes = new LinkedList<>(); // TODO : ตอบให้ได้ว่าทำไมถึงเปลี่ยนจาก arraylist เป็นแบบนี้
-        ladders = new LinkedList<>();
-        headPos  = new LinkedList<>(); // TODO : ลบ space หลังชื่อตัวแปร, เลิกเขียนย่อ
-        leaderboard = new Leaderboard();
-        map = new Board(mapRow,mapCol);
+
+    public void setupBoard() {
+        Integer boardColumn = 10;
+        Integer boardRow = 10;
+        board = new Board(boardRow, boardColumn);
     }
 
-    public void setupPlayer(){
+    private void setupTeleporter(){
+        ladderOrSnakeHeadPosition = new LinkedList<>();
+        setupLadder();
+        setupSnake();
+    }
+
+    public void setupPlayer() {
+        playersTurnOrder = new LinkedList<>();
+        Integer playerAmount = 4;
+
         for(int codeNameRunner = 1; codeNameRunner < playerAmount + 1; codeNameRunner++){
             String codeName = "P" + codeNameRunner;
             System.out.print(codeName + " name's: ");
             String name = playerInput.nextLine();
-            playersTurnOrder.add(new Player(codeName,name));
+            playersTurnOrder.add(new Player(name));
         }
     }
 
-    public void setupSnake(){
+    public void setupSnake() {
+        snakes = new LinkedList<>(); // TODO : ตอบให้ได้ว่าทำไมถึงเปลี่ยนจาก arraylist เป็นแบบนี้
+        Integer snakeAmount = 6;
+
         Integer maxTailPosition;
         Integer minTailPosition = 1;
-        Integer head; // TODO : change to headPosition
 
-        while(snakes.size() < snakeAmount){// TODO : แยกเหมือนladder
-            head = randomHead(headPos);
-            headPos.add(head);
-            maxTailPosition = head - 1;
-            int tail = randomFromInterval(minTailPosition,maxTailPosition); // TODO : เปลี่ยน type เป็น Integer, เลือกซักที่ว่าจะประกาศตรงไหน, change to tailPosition
-            snakes.add(new Snake(head,tail));
+        Integer headPosition;
+        Integer tailPosition;
+
+        while(snakes.size() < snakeAmount){
+            headPosition = randomHead(ladderOrSnakeHeadPosition);
+            ladderOrSnakeHeadPosition.add(headPosition);
+
+            maxTailPosition = headPosition - 1;
+            tailPosition = randomInRange(minTailPosition,maxTailPosition);
+
+            snakes.add(new Snake(headPosition,tailPosition));
         }
     }
 
-    public void setupLadder(){
-        Integer maxTailPosition = goal;// TODO : change to goalPosition
-        Integer minTailPostion; // TODO : สะกดผิด
+    public void setupLadder() {
+        ladders = new LinkedList<>();
+        Integer ladderAmount = 6;
+
+        Integer maxTailPosition = board.getGoalPosition();
+        Integer minTailPosition;
+
         Integer headPosition;
+        Integer tailPosition;
 
         while(ladders.size() < ladderAmount){
-            headPosition = randomHead(headPos);
-            headPos.add(headPosition);
+            headPosition = randomHead(ladderOrSnakeHeadPosition);
+            ladderOrSnakeHeadPosition.add(headPosition);
 
-            minTailPostion = headPosition + 1;
-            int tailPosition = randomFromInterval(minTailPostion,maxTailPosition);
+            minTailPosition = headPosition + 1;
+            tailPosition = randomInRange(minTailPosition,maxTailPosition);
 
             ladders.add(new Ladder(headPosition,tailPosition));
         }
     }
 
-    public void showLeaderboard(){
+    private void setupLeaderboard() {
+        leaderboard = new Leaderboard();
+    }
+
+    public void showLeaderboard() {
         System.out.println("------------------- Game has ended -------------------");
         leaderboard.showBoard();
         System.out.print("Play again ? (Y/N) : ");
     }
 
     public void play() throws InterruptedException {
-        boolean isSkip = false;
-        while(playersTurnOrder.size() != 1){ // BUG : infinite loop when has 0 player
-            map.renderMap(); // TODO : change method name to showBoard
-            Player currentPlayer = playersTurnOrder.removeFirst();
-            String codeName = currentPlayer.getCodeName(); // TODO : พิจารณาว่าจะเอาออกไหม
+        Integer currentPlayerIndex = 0;
 
-            if(!isSkip){ // TODO : ไปแยกตรงนี้ออก
-                System.out.print(codeName + "'s turn: press Enter to roll a dice. ");
-                String forSkip = playerInput.nextLine();
+        while(playersTurnOrder.size() > 1){
+            board.showBoard();
 
-                if(forSkip.equalsIgnoreCase("skip")){
-                    isSkip = true;
-                }
-            }
+            Player currentPlayer = playersTurnOrder.get(currentPlayerIndex);
+            String playerName = currentPlayer.getName();
 
+            System.out.print(playerName + "'s turn: press Enter to roll a dice. ");
+          //  playerInput.nextLine();
             Integer step = rollDice();
-            currentPlayer.move(step,goal); // TODO : แก้ move method แยกการเดิน, เช็คออกจากกัน
-            System.out.println(codeName + " got " + step + ".");
+
+            currentPlayer.move(step);
+            System.out.println(playerName + " got " + step + ".");
 
             if(isOnTeleporterHead(currentPlayer)){
-                // TODO : fix teleport logic her
-//            if(headPos.contains(p.getPosition())){
+// TODO : fix teleport logic here
+//            if(ladderOrSnakeHeadPosition.contains(p.getPosition())){
 //            Boolean isTeleported=false;
 //            for(Ladder l:ladders){
 //                isTeleported = l.teleport(p);
@@ -115,22 +128,28 @@ public class Game {
 //                for(Snake s:snakes){
 //                    isTeleported = s.teleport(p);
 //                    if(isTeleported){
-//                        System.out.println("Snake eats "+codeName);
+//                        System.out.println("Snake eats "+playerName);
 //                        break;
 //                    }
 //                }
 //            }
             }
 
-            System.out.println(codeName + "'s position: " + currentPlayer.getPosition());
-
             if(isReachedGoal(currentPlayer)){
-                System.out.println(codeName + " finished!!");
+                System.out.println(playerName + " finished!!");
                 playersTurnOrder.remove(currentPlayer);
                 leaderboard.addFinishedPlayer(currentPlayer);
             }else{
-                playersTurnOrder.addLast(currentPlayer); // TODO : เปลี่ยนวิธีเลือกเทิร์น player เป็นไล่ index แทน
+                if(currentPlayer.getPosition() > board.getGoalPosition()){
+                    Integer stepBack = (-2) * currentPlayer.getPosition() % board.getGoalPosition();
+                    currentPlayer.move(stepBack);
+                }
+
+                System.out.println(playerName + "'s position: " + currentPlayer.getPosition());
+                currentPlayerIndex++;
             }
+
+            currentPlayerIndex = currentPlayerIndex % playersTurnOrder.size();
 
             TimeUnit.MILLISECONDS.sleep(250);
         }
@@ -139,29 +158,30 @@ public class Game {
         leaderboard.addFinishedPlayer(lastPlayer);
     }
 
-    protected int randomHead(List<Integer> headList){
-        int minHeadPosition = 2;
-        int maxHeadPosition = goal - 1;
-        Integer head;
+    protected int randomHead(List<Integer> headPositionList) {
+        Integer minHeadPosition = 2;
+        Integer maxHeadPosition = board.getGoalPosition() - 1;
+        Integer headPosition;
         do{
-            head = randomFromInterval(minHeadPosition,maxHeadPosition);
-        }while(headList.contains(head));
-        return head;
+            headPosition = randomInRange(minHeadPosition,maxHeadPosition);
+        }while(headPositionList.contains(headPosition));
+        return headPosition;
     }
 
-    protected Integer randomFromInterval(Integer min,Integer max){
-        return (int)(Math.random() * (max - min + 1)) + min;
+    protected Integer randomInRange(Integer min,Integer max) {
+        return (int) (Math.random() * (max - min + 1)) + min;
     }
 
-    protected Integer rollDice(){
-        return randomFromInterval(1,6);
+    protected Integer rollDice() {
+        diceFaces = 6;
+        return randomInRange(1,diceFaces);
     }
 
-    public Boolean isOnTeleporterHead(Player p){
-        return headPos.contains(p.getPosition());
+    public Boolean isOnTeleporterHead(Player p) {
+        return ladderOrSnakeHeadPosition.contains(p.getPosition());
     }
 
-    public Boolean isReachedGoal(Player p){
-        return p.getPosition().equals(goal);
+    public Boolean isReachedGoal(Player p) {
+        return p.getPosition().equals(board.getGoalPosition());
     }
 }

@@ -2,15 +2,15 @@ import java.util.List;
 
 public class Board {
     private final Integer maxRow;
-    private final Integer maxCol;
+    private final Integer maxColumn;
     private final Integer goalPosition;
     private List<Ladder> ladders;
     private List<Snake> snakes;
 
-    Board(Integer maxRow,Integer maxCol) {
-        this.maxCol = maxCol;
+    Board(Integer maxRow,Integer maxColumn) {
+        this.maxColumn = maxColumn;
         this.maxRow = maxRow;
-        goalPosition = maxCol * maxRow;
+        goalPosition = maxColumn * maxRow;
     }
 
     protected void showBoard() {
@@ -18,8 +18,8 @@ public class Board {
         showBorder();
         
         for(int row = maxRow; row > 0; row--){
-            for(int col = 1; col <= maxCol; col++){
-                if(isEvenRow(row)){
+            for(int column = 1; column <= maxColumn; column++){
+                if(isEven(row)){
                     System.out.printf("| %-8d",runningNumber);
                     runningNumber--;
                 }else{
@@ -35,20 +35,19 @@ public class Board {
         showBorder();
     }
     
-    private void showBorder(){
-        System.out.println(String.format("%" + 10 * maxCol + "s"," ").replace(" ","-"));
+    private void showBorder() {
+        System.out.println(String.format("%" + 10 * maxColumn + "s"," ").replace(" ","-"));
     }
 
     protected void setupBoard() {
 
     }
 
-    private boolean isEvenRow(Integer row) {
-        return row % 2 == 0;
+    private boolean isEven(Integer number) {
+        return number % 2 == 0;
     }
 
-    protected Integer getGoalPosition(){
+    protected Integer getGoalPosition() {
         return goalPosition;
     }
-
 }

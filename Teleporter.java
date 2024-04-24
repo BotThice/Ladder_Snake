@@ -2,12 +2,9 @@
     protected Integer head;
     protected Integer tail;
 
-    Boolean teleport(Player p) {
+    void teleport(Player p) {
         if(isHead(p.getPosition())) {
             p.setPosition(tail);
-            return true;
-        }else{
-            return false;
         }
     }
 

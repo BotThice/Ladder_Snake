@@ -22,5 +22,4 @@ public class Leaderboard {
     protected void addFinishedPlayer(Player p) {
         playersFinishedOrder.addLast(p);
     }
-
 }
